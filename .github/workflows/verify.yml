@@ -1,0 +1,44 @@
+name: verify
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.24'
+        env:
+          # Use exactly the toolchain pinned above rather than letting go.mod
+          # silently download a different one, so CI and local agree.
+          GOTOOLCHAIN: local
+
+      # No `go mod download`: this module has no dependencies, and keeping it
+      # that way is a feature. `go mod tidy` in CI would be the place to enforce
+      # that, but it is checked by the diff guard below instead — tidy needs
+      # network access it should not have.
+      - name: Verify no dependencies crept in
+        run: |
+          set -euo pipefail
+          if grep -qE '^\s*require' go.mod; then
+            echo "::error::go.mod gained a dependency. This module is standard-library-only by design (see README)."
+            exit 1
+          fi
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Test with race detector
+        run: go test -race -count=1 ./...
+
+      - name: Lint
+        run: go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.6.2 run ./...

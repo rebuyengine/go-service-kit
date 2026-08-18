@@ -1,0 +1,22 @@
+# Mirrors the email-service configuration so a service adopting this module does
+# not meet a different standard in its dependency than in its own code.
+version: "2"
+
+linters:
+  default: standard
+  enable:
+    - errcheck
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+    - revive
+    - wsl_v5
+
+  settings:
+    errcheck:
+      check-type-assertions: true
+
+formatters:
+  enable:
+    - gofmt
