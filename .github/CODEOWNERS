@@ -24,11 +24,15 @@
 # If enforcement is wanted later, the fix is a per-repo `require_code_owner_reviews`
 # override on the standard tier, not a move to strict.
 #
-# ── Roster ───────────────────────────────────────────────────────────────────
+# ── Owners ───────────────────────────────────────────────────────────────────
 #
-# A starting point, not a closed list — the main Go contributors as of 2026-08-19.
-# Add people as the Go footprint grows. Removing someone is the part that needs
-# care: an owner who leaves and is not removed leaves a review request nobody
-# answers.
+# The backend guild, which is chartered as "merged PHP + Go guilds — maintainers of
+# shared backend libraries". This repo is one of those libraries, so the guild is the
+# owner rather than a hand-listed set of individuals: a team roster is maintained in
+# one place (the github-rbac stack) and survives people moving between pods, which a
+# list of handles here would not.
+#
+# The guild holds `maintain` on this repo, which is what lets them merge — `push`
+# cannot, under the standard tier (DO-388).
 
-*       @jared-rebuyengine @senator-rebuy @raulnunez-rebuy @dcrouch-rebuy @kevin-prod
+*       @rebuyengine/backend-guild
