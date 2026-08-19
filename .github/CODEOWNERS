@@ -10,19 +10,21 @@
 #
 # It AUTO-REQUESTS review from the owners on every PR. It does NOT block merge:
 # `main` runs the standard protection tier — 1 approval, `devops` in
-# `pull_request_bypassers`, no push restriction — set in the github-rbac stack in
-# shared-infrastructure.
+# `pull_request_bypassers` — set in the github-rbac stack in shared-infrastructure.
 #
-# That combination is deliberate (Jared, 2026-08-19). Enforcing owner review means
-# `require_code_owner_reviews = true`, which in that module only exists on the
-# STRICT tier — and the strict tier also restricts pushes to the `devops` team.
-# Under a push restriction, write-role users cannot merge their own PRs (measured
-# org-wide closing DO-388; `senator-rebuy` hit exactly this on admin-nextjs #53).
-# Four of the five owners below are not in `devops`, so enforcing owner review via
-# that tier would lock the owners out of merging the code they own.
+# Enforcing owner review would mean `require_code_owner_reviews = true`, which in
+# that module exists only on the STRICT tier. Strict also defaults to 2 approvals,
+# against the standing 1-approval-max direction. Deliberately not taken.
 #
-# If enforcement is wanted later, the fix is a per-repo `require_code_owner_reviews`
-# override on the standard tier, not a move to strict.
+# ⚠️ What makes merging work here is the guild holding `maintain`, not `push`.
+# restrict_pushes is on under the standard tier with an empty allow-list, and DO-388
+# established that write-role users cannot merge in that configuration — merge is a
+# push to the base branch, and the floor is maintain-and-up. senator-rebuy hit
+# exactly this on admin-nextjs #53, which is a standard-tier repo; the fix was
+# raising his role, not changing tier.
+#
+# (An earlier version of this file attributed that to the strict tier. It was wrong;
+# corrected 2026-08-19.)
 #
 # ── Owners ───────────────────────────────────────────────────────────────────
 #
