@@ -114,3 +114,9 @@ request, including from code that knows nothing about HTTP.
 
 `Options.Output` exists so tests can capture output. **Production must leave it
 nil** — that is what selects stdout.
+
+## License
+
+[MIT](LICENSE). Chosen over Apache 2.0 for simplicity — no `NOTICE` file to maintain and no
+patent-grant or state-changes clauses to reason about — and because MIT is the dominant
+license in the Go ecosystem, so it surprises nobody vendoring this.
