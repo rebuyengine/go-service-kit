@@ -1,0 +1,40 @@
+# Code owners for go-service-kit.
+#
+# This module is imported by every Rebuy Go service, so a change here ships to all
+# of them at once. Owners are the people who actually write Go here — named
+# individuals rather than a team, deliberately: the Go contributor set does not map
+# onto any existing GitHub team, and pointing at `devops` would route reviews to
+# people who do not work in this language.
+#
+# ── What this file does, and what it does not ────────────────────────────────
+#
+# It AUTO-REQUESTS review from the owners on every PR. It does NOT block merge:
+# `main` runs the standard protection tier — 1 approval, `devops` in
+# `pull_request_bypassers` — set in the github-rbac stack in shared-infrastructure.
+#
+# Enforcing owner review would mean `require_code_owner_reviews = true`, which in
+# that module exists only on the STRICT tier. Strict also defaults to 2 approvals,
+# against the standing 1-approval-max direction. Deliberately not taken.
+#
+# ⚠️ What makes merging work here is the guild holding `maintain`, not `push`.
+# restrict_pushes is on under the standard tier with an empty allow-list, and DO-388
+# established that write-role users cannot merge in that configuration — merge is a
+# push to the base branch, and the floor is maintain-and-up. senator-rebuy hit
+# exactly this on admin-nextjs #53, which is a standard-tier repo; the fix was
+# raising his role, not changing tier.
+#
+# (An earlier version of this file attributed that to the strict tier. It was wrong;
+# corrected 2026-08-19.)
+#
+# ── Owners ───────────────────────────────────────────────────────────────────
+#
+# The backend guild, which is chartered as "merged PHP + Go guilds — maintainers of
+# shared backend libraries". This repo is one of those libraries, so the guild is the
+# owner rather than a hand-listed set of individuals: a team roster is maintained in
+# one place (the github-rbac stack) and survives people moving between pods, which a
+# list of handles here would not.
+#
+# The guild holds `maintain` on this repo, which is what lets them merge — `push`
+# cannot, under the standard tier (DO-388).
+
+*       @rebuyengine/backend-guild
