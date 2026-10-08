@@ -97,7 +97,7 @@ func run(args []string, indentDeltaEnv string) error {
 		return err
 	}
 
-	if err := os.WriteFile(outputFile, []byte(output), 0o644); err != nil { //nolint:gosec // manifests are not secret
+	if err := os.WriteFile(outputFile, []byte(output), 0o600); err != nil {
 		return fmt.Errorf("write output: %w", err)
 	}
 
