@@ -104,6 +104,39 @@ request, including from code that knows nothing about HTTP.
 > ⚠️ The id rides on the `context`, so only slog's `*Context` methods can see it.
 > `logger.ErrorContext(ctx, …)` carries it; `logger.Error(…)` does not.
 
+## Tools
+
+### `cmd/yaml-template-injector`
+
+Pastes shared YAML snippets (typically a common `env:` list) into Kubernetes manifests at deploy
+time, because YAML has no include. A manifest marks the spot with a comment placeholder:
+
+```yaml
+        env:
+          # {{common_environment_variables}}
+```
+
+and a config maps each placeholder to a snippet file:
+
+```yaml
+rules:
+  - variable: common_environment_variables
+    file: .build/k8s/common/templates/environment-variables.template.yaml
+```
+
+Run it from the repo root at a pinned version (no image, no registry access):
+
+```shell
+INDENT_DELTA=0 go run github.com/rebuyengine/go-service-kit/cmd/yaml-template-injector@vX.Y.Z \
+  .build/k8s/staging/injector.config.yaml .build/k8s/staging/api.deployment.yaml OUT.yaml
+```
+
+`INDENT_DELTA` shifts every snippet line right (positive) or left (negative) by that many spaces.
+It replaces the `gcr.io/.../yaml-template-injector` image with the same arguments and output, and
+**fails** where the image silently continued: a snippet file that cannot be read used to become
+an empty string, deploying a manifest without its environment variables. The config reader is
+deliberately strict (one documented shape, standard library only) and rejects anything else.
+
 ## Configuration
 
 | Variable | Default | Effect |
