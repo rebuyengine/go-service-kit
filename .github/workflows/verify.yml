@@ -16,7 +16,7 @@ jobs:
 
       - uses: actions/setup-go@v6
         with:
-          go-version: '1.24'
+          go-version: '1.27.3'
         env:
           # Use exactly the toolchain pinned above rather than letting go.mod
           # silently download a different one, so CI and local agree.
@@ -41,4 +41,4 @@ jobs:
         run: go test -race -count=1 ./...
 
       - name: Lint
-        run: go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.6.2 run ./...
+        run: go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.15.0 run ./...
